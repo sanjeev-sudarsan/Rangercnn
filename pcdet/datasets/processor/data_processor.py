@@ -4,6 +4,9 @@ import numpy as np
 from skimage import transform
 
 from ...utils import box_utils, common_utils
+from .LaserScan import range_image_creator
+from pcdet.datasets.processor import LaserScan
+import matplotlib.pyplot as plt
 
 tv = None
 try:
@@ -70,6 +73,7 @@ class DataProcessor(object):
         self.data_processor_queue = []
 
         self.voxel_generator = None
+        self.rm_creator = None
 
         for cur_cfg in processor_configs:
             cur_processor = getattr(self, cur_cfg.NAME)(config=cur_cfg)
@@ -176,6 +180,23 @@ class DataProcessor(object):
             data_dict['voxels'] = voxels
             data_dict['voxel_coords'] = coordinates
             data_dict['voxel_num_points'] = num_points
+        return data_dict
+
+    def transform_points_to_rangeimage(self,data_dict=None, config=None):
+        if data_dict is None:
+            return partial(self.transform_points_to_rangeimage, config=config)
+        points = data_dict['points']
+        if points.shape[1] >= 4:
+            remission=True
+        else:
+            remission = False
+        rm_creator = range_image_creator(H=config.H, W=config.W, cW=config.cW, remission=remission, cfg=config)
+        rm_creator.create(points)
+        data_dict["rangemap_xyz"] = rm_creator.cartesian_rangemap
+        data_dict["rangemap_spherical"] = rm_creator.spherical_rangemap
+        if points.shape[1] >=4:
+            data_dict['intensity'] = rm_creator.intensity
+
         return data_dict
 
     def sample_points(self, data_dict=None, config=None):

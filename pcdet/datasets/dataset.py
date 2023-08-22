@@ -200,7 +200,6 @@ class DatasetTemplate(torch_data.Dataset):
         batch_size = len(batch_list)
         ret = {}
         batch_size_ratio = 1
-
         for key, val in data_dict.items():
             try:
                 if key in ['voxels', 'voxel_num_points']:
@@ -222,6 +221,16 @@ class DatasetTemplate(torch_data.Dataset):
                     for k in range(batch_size):
                         batch_gt_boxes3d[k, :val[k].__len__(), :] = val[k]
                     ret[key] = batch_gt_boxes3d
+
+                # elif key in ['range_y', 'range_x']:
+                #     max_n = max([len(x) for x in val])
+                #     poi = []
+                #     for i, p in enumerate(val):
+                #         pad_l = max_n - len(p)
+                #         p_pad = np.pad(p, ((0, pad_l)), mode='constant', constant_values=0)
+                #         poi.append(p_pad)
+                #     ret[key] = np.stack(poi, axis=0)
+
 
                 elif key in ['roi_boxes']:
                     max_gt = max([x.shape[1] for x in val])
