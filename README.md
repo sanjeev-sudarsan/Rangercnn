@@ -3,9 +3,9 @@ A range image based 3D object detector based on the paper RangeRCNN: Towards Fas
 
 ## Performance
 
-	| Rangercnn |  Easy |  Moderate |  Hard |
-	| ------------- | ------------- |
-	| Car AP@0.70 3D| 83.0985 | 73.4474 | 70.2410 |
+	| Rangercnn     |      Easy     |   Moderate    |     Hard      |
+	| ------------- | ------------- | ------------- | ------------- |
+	| Car AP@0.70 3D|     83.0985   |    73.4474    |    70.2410    |
 	| Car AP_R40@0.70 3D| 84.3880 | 73.3036 | 71.1341 |
 
 
