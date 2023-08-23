@@ -1,3 +1,5 @@
+## Introduction
+A range image based 3D object detector based on the paper RangeRCNN: Towards Fast and Accurate 3D Object Detection with Range Image Representation (https://arxiv.org/abs/2009.00206). The detector is single stage as I did not implement the two stage model yet.
 
 ## Installation
 
