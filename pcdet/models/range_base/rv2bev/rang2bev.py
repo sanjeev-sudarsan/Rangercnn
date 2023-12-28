@@ -1,27 +1,7 @@
-"""
-to generate bird eye view, we have to filter point cloud
-first. which means we have to limit coordinates
-
-
-"""
 import numpy as np
-
-import os
 import torch
-import sys
 import torch.nn as nn
 
-if '/opt/ros/kinetic/lib/python2.7/dist-packages' in sys.path:
-  sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
-import cv2
-import matplotlib.pyplot as plt
-
-
-# POINT_CLOUD_RANGE: [0, -40, -3, 70.4, 40, 1] res: 0.1  800*704  stride: 4 200*176
-
-#[0,69.12] [-39.68,39.68]  bev : 496*432 y*x
-
-# image size would be 800*704
 
 
 class RANGE2BEV(nn.Module):
@@ -33,7 +13,7 @@ class RANGE2BEV(nn.Module):
         self.z_range = self.model_cfg['Z_RANGE']
         self.resolution = self.model_cfg['RESOLUTION']
         self.z_resolution = 0.8
-        d = int((self.z_range[1] - self.z_range[0]) / self.z_resolution)
+        #d = int((self.z_range[1] - self.z_range[0]) / self.z_resolution)
 
 
 
