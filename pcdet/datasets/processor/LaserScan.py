@@ -36,6 +36,14 @@ INCL = -ZENITH
 
 class range_image_creator():
   def __init__(self, H=64, W=2048, cW =512, remission= False,cfg=None):
+    """
+    Parameters:
+        H (int) = Height of the range image.
+        W (int) = Width of the range image.
+        cW (int) = Cropped width of the range image.
+        remission (boolean) = If remission is required.
+    """
+    
     self.H = H
     self.W = W
     self.cW = cW
@@ -48,7 +56,15 @@ class range_image_creator():
     self.cartesian_rangemap = np.zeros((H, W, 3))
 
   def crop_range_image(self, range_image):
+    """
+    Crops the range image
+    Parameters:
+        range_image (numpy.ndarray) = The range image to be cropped.
 
+    Returns:
+        new_range_image (numpy.ndarray): The cropped image.
+    """
+    
     mid = self.W // 2
     crop = self.cW // 2
     beg = mid - crop
@@ -62,11 +78,20 @@ class range_image_creator():
 
 
   def create(self, pc):
+    """
+    Creates range images from a point cloud.
+    Parameters:
+        pc (numpy.ndarray) = Point cloud.
+
+    """
+    
     if self.remission:
       intensity = pc[:,3]
     else:
       intensity = None
     pc = pc[:,:3]
+
+    # Determine the indices of all the points in the range image.
     xy_norm = np.linalg.norm(pc[:, :2], ord=2, axis=1)
     error_list = []
     for i in range(len(INCL)):
@@ -82,8 +107,8 @@ class range_image_creator():
     col_inds = np.round(col_inds).astype(np.int32)
     col_inds[col_inds == width] = width - 1
     col_inds[col_inds < 0] = 0
-    point_range = np.linalg.norm(pc[:, :3], axis=1, ord=2)
 
+    point_range = np.linalg.norm(pc[:, :3], axis=1, ord=2)
     order = np.argsort(-point_range)
     point_range = point_range[order]
     pc = pc[order]
@@ -97,15 +122,11 @@ class range_image_creator():
     self.col_inds = col_inds
     self.row_inds = row_inds
 
-
-
     if self.W != self.cW:
-
       self.spherical_rangemap = self.crop_range_image(self.spherical_rangemap)
       if self.remission:
         self.intensity = self.crop_range_image(self.intensity)
       self.cartesian_rangemap = self.crop_range_image(self.cartesian_rangemap)
-
 
 
 #!/usr/bin/env python3
